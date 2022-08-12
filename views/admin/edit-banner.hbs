@@ -1,0 +1,76 @@
+ <section>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">Admin Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-category">Categories</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-users">Users </a>
+                    </li>
+                   
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-product">Products </a>
+                    </li>
+                    
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-banner">Banners</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="">Cart</a>
+                    </li>
+                </ul>
+                <a href="/admin/adminlogout" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+</section>
+<section>
+  <div class=" container row">
+    <div class="ml-5 col-md-6">
+      <h2 class="text-center mt-5">Edit Banner</h2>
+      
+    
+        
+      <form action="/admin/edit-banner" method="post" enctype="multipart/form-data">
+      
+
+
+      <input type="text" name="id" class="invisible" value="{{banner._id}}" id="id">
+        <label for="bannerimage">Banner Image</label>
+        
+        <input type="file" name="bannerimage" class="form-control" value="{{banner.bannerimage}}">
+
+        <label for="banner">Title</label>
+        <input type="text" name="title" class="form-control" value="{{banner.title}}">
+        <label for="productdescription" >Caption</label>
+        <input type="text" name="caption" class="form-control"  value="{{banner.caption}}"  >
+        <label for=""> Category</label>
+        <select type="select" name="category" class="form-control" >
+          {{#each categories}}
+          <option value="{{this.categoryname}}">{{this.categoryname}}</option>
+          {{/each}}
+        </select>
+          
+        
+          
+      
+      
+
+        <button type="submit" class="btn btn-success mt-4">Submit</button>
+
+      </form>
+    </div>
+  </div>
+</section>

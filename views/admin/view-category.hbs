@@ -1,0 +1,84 @@
+<section>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">Admin Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-category">Categories</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-users">Users </a>
+                    </li>
+                   
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-product">Products </a>
+                    </li>
+                    
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-banner">Banners</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="">Cart</a>
+                    </li>
+                </ul>
+                <a href="/admin/adminlogout" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+</section>
+<section>
+    <div class="container">
+         <h3>All Categories</h3>
+        <div class="">
+            <a href="/admin/add-category" class="btn btn-success my-4">Add Category</a>
+        </div>
+        <table class="table mt-5" id="userTable">
+            <thead>
+                <tr>
+                    <th scope="col">name</th>
+                    <th scope="col">description</th>
+                    <td>Image</td>
+                    <td></td>
+<td></td>
+
+                </tr>
+            </thead>
+            <tbody>
+                {{#each categories}}
+                <tr>
+                    <td>{{this.categoryname}}</td>
+                    <td>{{this.categorydescription}}</td>
+                    <td> <img width="50px" height="50px" src="/images/productimg/{{this.categoryimage}}" alt="image"></td>
+                    <td><a href="/admin/editcategory/{{this._id}}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="/admin/deletecategory/{{this._id}}" class="confirm btn btn-danger">Delete</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+
+        </table>
+    </div>
+</section>
+<script>
+
+    $(document).ready(function () {
+        $('#userTable').DataTable();
+    });
+    var elems = document.getElementsByClassName('confirm');
+    var confirmIt = function (e) {
+        if (!confirm('Are you sure?')) e.preventDefault();
+    };
+    for (var i = 0, l = elems.length; i < l; i++) {
+        elems[i].addEventListener('click', confirmIt, false);
+    }
+
+</script>

@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-5 mx-auto">
+      <div id="first">
+        <div class="myform form ">
+          <div class="logo mb-3">
+            
+
+        
+          <form action="/otpverify" method="post">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Enter The OTP</label>
+              {{!-- <div class="text-danger">{{#unless otpcheck}}
+                Invalid otp
+                {{/unless}}
+              </div> --}}
+              <input type="text" name="otp" id="otp" class="form-control" aria-describedby="emailHelp"
+                placeholder="">
+            </div>
+            <input type="text" name="mobile" id="mobile" value="{{mobile}}" class="invisible">
+            <div class="col-md-12 text-center ">
+              
+    <div class="row"><button type="submit" class=" btn btn-md btn-block mybtn btn-primary tx-tfm mt-4col-3 mx-auto" style="    width: auto;
+    transform: translateX(-30px);">Submit</button>
+                
+                </div>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<link rel="stylesheet" href="stylesheets/login.css" type="text/css">

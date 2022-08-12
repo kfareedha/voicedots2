@@ -1,0 +1,99 @@
+<section class="vh-100">
+  <div class="container  h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+
+      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+        <form id="userlogin" action="/login" method="post">
+          <h3 class="my-4">Welcome to&nbsp;&nbsp;<span
+                    class="text-primary font-weight-bold border px-3 mr-1">v</span> voice dots...</h3>
+          {{!-- <div class="row align-items-center py-3 px-xl-5">
+    <div class="col-lg-3 d-none d-lg-block">
+        
+            <h5 class="m-0 display-5 font-weight-semi-bold"><span
+                    class="text-primary font-weight-bold border px-3 mr-1">v</span>voicedots</h5>
+       
+    </div> --}}
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form1Example13">Enter Email </label>
+            <input type="email" id="form1Example13" name="email" class="form-control form-control-md" />
+
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form1Example23">Enter Password</label>
+            <input type="password" id="form1Example23" name="password" class="form-control form-control-md" />
+
+          </div>
+
+
+
+          {{#if loginerr}}
+          <p class="text-danger">{{loginerr}}</p>
+          {{/if}}
+
+          <!-- Submit button -->
+           <div class="col-md-12 text-center ">
+              <button type="submit" class=" btn btn-md btn-block mybtn btn-primary tx-tfm mt-4">Login</button>
+            </div>
+
+          {{!-- <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-5 mb-0 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Forgot password??</p>
+          </div> --}}
+        </form>
+
+          <!-- Email input -->
+          
+          <form id="loginotp" action="/loginotp" method="post">
+            <h6 class="my-4">Login with OTP</h6>
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form1Example13">Enter mobile Number</label>
+              <input type="text" id="form1Exahghg" name="mobile" class="form-control form-control-md" />
+
+            </div>
+             <div class="col-md-12 text-center ">
+              <button type="submit" class=" btn btn-md btn-block mybtn btn-primary tx-tfm mt-4">GET OTP</button>
+            </div>
+          </form>
+          <div class="d-flex justify-content-around align-items-center mb-4">
+            <p class="text-center text-muted mt-5 mb-0">Create New Account? <a href="/register"
+                class="fw-bold text-body"><u>Sign Up</u></a></p>
+          </div>
+      </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.js"></script>
+
+<script>
+
+  $("#userlogin").validate({
+    errorClass:"validerror",
+    rules: {
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 6
+      }
+    }
+  });
+
+
+      
+
+</script>
+<script>
+$("#loginotp").validate({
+      rules:{
+        mobileotp:{
+          required:true
+          
+        }
+      }
+      })
+      </script>
