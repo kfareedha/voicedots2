@@ -1,0 +1,121 @@
+<section>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">Admin Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-category">Categories</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-users">Users </a>
+                    </li>
+                   
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-product">Products </a>
+                    </li>
+                    
+                     <li class="nav-item">
+                        <a class="nav-link" href="/admin/view-banner">Banners</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link active" href="/admin/view-order">Orders</a>
+                    </li>
+                </ul>
+                <a href="/admin/adminlogout" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+</section><section>
+    <div class="container">
+        <h3>All Orders</h3>
+        
+       
+        <table class="table mt-5 display" id="orderTable">
+            <thead>
+                <tr>
+                    <th width="10%" scope="col">Date</th>
+                    <th width="10%" scope="col">User</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Total Amount</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">products</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Current Status</th>
+
+                    <th scope="col">Status</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each orderdetails}}
+
+                <tr>
+                    <td>{{this.orderDate}}</td>
+                    <td>{{this.user.name}}</td>
+                    <td>{{this.deliveryDetails.name}}<br>
+                        {{this.deliveryDetails.address1}}<br>
+                        {{this.deliveryDetails.city}}<br>
+                        {{this.deliveryDetails.state}}<br>
+                        {{this.deliveryDetails.pinCode}}<br>
+                        {{this.deliveryDetails.mobile}}
+                    </td>
+                    <td>Rs.{{this.totalPrice}}</td>
+
+
+                    <td>{{this.paymentDetails}}</td>
+
+                   
+
+                    <td> {{#each this.orderItems}} {{this.product.productname}} <br>{{/each}}</td>
+                    <td>{{#each this.orderItems}} {{this.quantity}} <br>{{/each}}</td>
+                   
+                    <td>
+                        {{this.orderStatus}}
+                    </td>
+                    
+                    <td>{{#if (eq this.Status 'cancelled')}}
+                                        <div class="mt-3"><a class="btn btn-danger px-3 font-weight-bold">Cancelled</a><div> 
+                                            {{else}}
+                        <a href="/admin/orderstatus-shipped/{{this._id}}" class="btn btn-primary mb-2">Shipped</a>
+
+
+
+                        <a href="/admin/orderstatus-deliverd/{{this._id}}" class="btn btn-primary mb-2">Deliverd</a>
+
+
+                        <a href="/admin/orderstatus-arriving/{{this._id}}" class="btn btn-primary">Arriving</a>
+                  {{/if}}  </td>
+
+                </tr>
+
+                {{/each}}
+
+
+            </tbody>
+        </table>
+    </div>
+
+</section>
+<script>
+    $(document).ready(function () {
+
+
+        $('#orderTable').wrap('<div id="hide" style="display:none" class="mt-5"/>');
+
+        $('#hide').css('display', 'block');
+    });
+
+
+    var table = $('#orderTable').DataTable();
+</script>

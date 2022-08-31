@@ -1,72 +1,67 @@
-<section class="vh-100">
-  <div class="container  h-100">
-    <div class="row d-flex align-items-center justify-content-center h-100">
-
-      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form id="userlogin" action="/login" method="post">
-          <h3 class="my-4">Welcome to&nbsp;&nbsp;<span
-                    class="text-primary font-weight-bold border px-3 mr-1">v</span> voice dots...</h3>
-          {{!-- <div class="row align-items-center py-3 px-xl-5">
-    <div class="col-lg-3 d-none d-lg-block">
-        
-            <h5 class="m-0 display-5 font-weight-semi-bold"><span
-                    class="text-primary font-weight-bold border px-3 mr-1">v</span>voicedots</h5>
-       
-    </div> --}}
-          <!-- Email input -->
-          <div class="form-outline mb-4">
-            <label class="form-label" for="form1Example13">Enter Email </label>
-            <input type="email" id="form1Example13" name="email" class="form-control form-control-md" />
-
+<div class="container">
+  <div class="row">
+    <div class="col-md-5 mx-auto">
+      <div id="first">
+        <div class="myform form ">
+          <div class="logo mb-3">
+            <div class="col-md-12 text-center">
+              <h2>Login to&nbsp;<span
+                    class="text-primary font-weight-bold border px-3 mr-1">V</span> voicedots.</h2>
+            </div>
           </div>
-
-          <!-- Password input -->
-          <div class="form-outline mb-4">
-            <label class="form-label" for="form1Example23">Enter Password</label>
-            <input type="password" id="form1Example23" name="password" class="form-control form-control-md" />
-
-          </div>
-
-
-
+          <form action="/login" method="post" name="login" id="userlogin">
+          <div class="text-danger">
           {{#if loginerr}}
           <p class="text-danger">{{loginerr}}</p>
           {{/if}}
+          </div>
 
-          <!-- Submit button -->
-           <div class="col-md-12 text-center ">
-              <button type="submit" class=" btn btn-md btn-block mybtn btn-primary tx-tfm mt-4">Login</button>
-            </div>
-
-          {{!-- <div class="divider d-flex align-items-center my-4">
-            <p class="text-center fw-bold mx-5 mb-0 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Forgot password??</p>
-          </div> --}}
-        </form>
-
-          <!-- Email input -->
           
-          <form id="loginotp" action="/loginotp" method="post">
-            <h6 class="my-4">Login with OTP</h6>
-            <div class="form-outline mb-4">
-              <label class="form-label" for="form1Example13">Enter mobile Number</label>
-              <input type="text" id="form1Exahghg" name="mobile" class="form-control form-control-md" />
-
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp"
+                placeholder="Enter email">
             </div>
-             <div class="col-md-12 text-center ">
-              <button type="submit" class=" btn btn-md btn-block mybtn btn-primary tx-tfm mt-4">GET OTP</button>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Password</label>
+              <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp"
+                placeholder="Enter Password">
+            </div>
+
+
+          
+
+            <div class="col-md-12 text-center ">
+              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm mt-4">Login</button>
             </div>
           </form>
-          <div class="d-flex justify-content-around align-items-center mb-4">
-            <p class="text-center text-muted mt-5 mb-0">Create New Account? <a href="/register"
-                class="fw-bold text-body"><u>Sign Up</u></a></p>
+ <div class="col-md-12 text-center ">forgot password??</div>
+          <div class="col-md-12 ">
+            <div class="login-or">
+              <hr class="hr-or">
+              <span class="span-or" > Use otp to login</span>
+            </div>
           </div>
+          <form action="/loginotp" method="post" id="loginotp">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Enter mobile</label>
+              <input type="text" name="mobile" id="mobile" class="form-control" aria-describedby="emailHelp"
+                placeholder="Enter Your mobile">
+            </div>
+            <div class="col-md-12 text-center ">
+              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm mt-4 mb-2">Get OTP</button>
+            </div>
+          </form>
+          <div class="form-group">
+            <p class="text-center">Don't have account? <a href="/register" id="signup">Sign up here</a></p>
+          </div>
+
+        </div>
       </div>
     </div>
-</section>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.js"></script>
-
+  </div>
+</div>
+<link rel="stylesheet" href="stylesheets/login.css" type="text/css">
 <script>
 
   $("#userlogin").validate({

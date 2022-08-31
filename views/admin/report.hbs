@@ -37,58 +37,79 @@
     </nav>
 </section><section>
     <div class="container">
-        <h3>All Banners</h3>
-        <div class="">
-            <a href="/admin/add-banner" class="btn btn-success my-4">Add Banner</a>
-        </div>
-        <table class="table mt-5 display" id="usersTable">
+
+
+       <div class=" d-flex justify-content-between"> <div><h3>Delivered Orders </h3></div> <div> <span class="text-right"> Download</span><button id="invoice" onclick="generatePDF()"><i class="fa fa-download" aria-hidden="true"></i></div></div><br>
+        
+        <table class="table mt-5 display" id="orderTable">
             <thead>
                 <tr>
-                    <th scope="col">BannerImage</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Caption</th>
+                    <th width="10%" scope="col">Date</th>
+                    <th width="10%" scope="col">User</th>
+                                       
+                   <th scope="col">Payment</th>
+                    <th scope="col">products</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total Amount</th>         
+
                     
-                    
-                    <th></th>
-                    
+
                 </tr>
             </thead>
             <tbody>
-                {{#each banners}}
+
+                {{#each deliveredOrder}}
+
                 <tr>
+                    <td>{{this.orderDate}}</td>
+                    <td>{{this.user.name}}</td>
+                    
                    
+
+
+                    <td>{{this.paymentDetails}}</td>
+
+                   
+
+                    <td> {{#each this.orderItems}} {{this.product.productname}} <br>{{/each}}</td>
+                    <td>{{#each this.orderItems}} {{this.quantity}} <br>{{/each}}</td>
+                    <td>Rs.{{this.totalPrice}}</td>
                     
-                    <td>
-                        
-                        
-                        <img width="50px" height="50px" src="/images/productimg/{{this.bannerimage}}" alt="image">
-                        
-                        
-                         </td>
-                          <td>{{this.title}} </td>
-                    <td>{{this.caption}} </td>
                     
-                    <td>
-                        <a href="/admin/edit-banner/{{this._id}}" class="btn btn-primary">Edit</a>
-                        <a href="/admin/delete-banner/{{this._id}}" class="btn btn-danger"
-                            onclick="return confirm('Are you sure to delete {{this.Name}}?')">Delete</a>
-                    </td>
+                    
+
                 </tr>
+
                 {{/each}}
+
+
             </tbody>
+            
         </table>
     </div>
-
+   
+   <br> <div class="text-left ml-5"><button id="invoice" onclick="generatePDF()"><i class="fa fa-download" aria-hidden="true"></i></div>
 </section>
 <script>
     $(document).ready(function () {
 
 
-        $('#usersTable').wrap('<div id="hide" style="display:none"/>');
+        $('#orderTable').wrap('<div id="hide" style="display:none"/>');
 
         $('#hide').css('display', 'block');
     });
 
 
-    var table = $('#usersTable').DataTable();
+    var table = $('#orderTable').DataTable();
 </script>
+
+<script>
+    function generatePDF() {
+        const element = document.getElementById('invoice');
+        html2pdf()
+            .from(element)
+            .save();
+
+    }
+</script>
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.min.js"></script>

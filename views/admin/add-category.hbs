@@ -28,7 +28,7 @@
                         <a class="nav-link" href="/admin/view-banner">Banners</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="">Cart</a>
+                         <a class="nav-link active" href="/admin/view-order">Orders</a>
                     </li>
                 </ul>
                 <a href="/admin/adminlogout" class="btn btn-danger">Logout</a>
@@ -46,7 +46,7 @@
                             <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
                                 <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-1">Add Category</p>
-                                <form class="mx-1 mx-md-4" id="myform" action="/admin/add-category" method="post"  enctype="multipart/form-data">
+                                <form class="mx-1 mx-md-4" id="addcategory" action="/admin/add-category" method="post"  enctype="multipart/form-data">
                                     {{#if exist}}
                                     <p style="color:crimson ;">This category already exist</p>
                                     {{/if}}
@@ -86,3 +86,26 @@
         </div>
     </div>
 </section>
+<script>
+$(document).ready(function () {
+    $("#addcategory").validate({
+      rules: {
+        categoryname: {
+          required: true,
+
+        },
+        categorydescription: {
+          required: true,
+
+        },
+        categoryimage: {
+          required: true,
+
+        },
+        
+       
+
+      }
+    })
+  })
+  </script>

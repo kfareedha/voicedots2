@@ -1,4 +1,4 @@
-<section>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script><section>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/admin">Admin Panel</a>
@@ -35,54 +35,37 @@
             </div>
         </div>
     </nav>
-</section><section>
+</section>
+<section>
   <div class=" container row">
     <div class="ml-5 col-md-6">
-      <h2 class="text-center mt-5">Edit Product</h2>
-      
-    
-        
-      <form action="/admin/edit-product" method="post" enctype="multipart/form-data" id="addproduct">
-      
-
-
-      <input type="text" name="id" class="invisible" value="{{product._id}}" id="id">
-        <label for="productname">Product Name</label>
-        
-        <input type="text" name="productname" class="form-control" value="{{product.productname}}">
-
-        <label for="productdescription">Product Description</label>
-        <input type="text" name="productdescription" class="form-control" value="{{product.productdescription}}">
-
-
- 
-        <label for="">Product Image1</label>
-        <input type="file" name="productimage" class="form-control"  value="{{product.productimage}}" >
-        <label for="">Product Image2</label>
-        <input type="file" name="productimage" class="form-control" value="{{product.productimage}}"  >
-        <label for="">Product Image3</label>
-        <input type="file" name="productimage" class="form-control"  value="{{product.productimage}}" >
-        
-         
-
-
-
-
+      <h2 class="text-center mt-5">Add Coupon</h2>
+      <form action="/admin/add-coupon" method="post"  id="addcoupon">
+       {{!-- {{#if exist}}
        
-        <label for="productprice">Product Price</label>
-        <input type="text" name="productprice" class="form-control" value="{{product.productprice}}">
-         <label for="">Product Category</label>
-
-        <select type="select" name="productcategory" class="form-control" >
-          {{#each categories}}
-          <option value="{{this.categoryname}}">{{this.categoryname}}</option>
-          {{/each}}
-        </select>
-          
+       <script>
+            Swal.fire({
+  text: 'coupon already exist',
+  target: '#custom-target',
+  customClass: {
+    container: 'position-absolute'
+  },
+  toast: true,
+  position: 'center'
+})
         
-          
-      
-      
+         </script>
+          {{/if}} --}}
+        <label for="">Coupon Name</label>
+        <input type="text" name="name" class="form-control" >
+        <label for="">Code</label>
+        <input type="text" name="code" class="form-control" >
+        <label for="">Discription</label>
+        <input type="text" name="description" class="form-control" >
+        <label for=""> Percentage</label>
+       <input type="number" name="percentage" class="form-control" >
+        
+
 
         <button type="submit" class="btn btn-success mt-4">Submit</button>
 
@@ -92,21 +75,21 @@
 </section>
 <script>
 $(document).ready(function () {
-    $("#addproduct").validate({
+    $("#addbcoupon").validate({
       rules: {
-        productname: {
+        name: {
           required: true,
 
         },
-        productdescription: {
+        code: {
           required: true,
 
         },
-        productcategory: {
+        description: {
           required: true,
 
         },
-        productimage: {
+        percentage: {
           required: true,
 
         },

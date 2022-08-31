@@ -6,7 +6,16 @@ const cartModel = require('../models/cartModel')
 const wishlistModel = require('../models/wishlistModel')
 const productModel = require('../models/productModel')
 const mongoose = require('mongoose')
-module.exports = {
+const addressModel = require('../models/addressModel')
+const Razorpay = require('razorpay');
+const orderModel = require('../models/orderModel')
+const couponModel = require('../models/couponModel');
+var instance = new Razorpay({
+    key_id: 'rzp_test_DRTObS63yIQCzy',
+    key_secret: 'UoelUxDoICR5bwkpCVVE0tmI',
+  });
+
+let userHelper = {
 
     userSave: (userData) => {
         return new Promise(async (resolve, reject) => {
@@ -54,7 +63,7 @@ module.exports = {
     },
     updateProfile: (details) => {
         return new Promise((resolve, reject) => {
-            console.log("id", details)
+            // console.log("id", details)
             User.findByIdAndUpdate((details.id), { name: details.name, email: details.email, mobile: details.mobile }).then((data) => {
                 console.log(data)
                 resolve(data)
@@ -77,17 +86,19 @@ module.exports = {
                 } else {
                     let cartArray = { product: proId, quantity: 1 }
                     cartModel.findOneAndUpdate({ user: user_Id }, { $push: { cartItems: cartArray } }).then(async (data) => {
-                        let wishlist = await wishlistModel.findOne({ user: user_Id, 'wishlistItems.product': proId })
+                        let wishlist = await wishlistModel.findOne({ user: user_Id, 'wishListItems.product': proId })
+                       console.log(wishlist,"wish")
                         if (wishlist) {
                             wishlistModel.updateOne({ user: userId }, {
                                 $pull: {
-                                    wishlistItems:
+                                    wishListItems:
                                         { product: proId }
                                 }
                             }).then((data) => {
                                 response.added = false
                                 response.data = data
                                 resolve(response)
+                                // console.log(wishlist,"wish22")
                             })
                         }
                         resolve(data)
@@ -106,11 +117,12 @@ module.exports = {
                     ]
                 })
                 cart.save().then(async (data) => {
-                    let wishlist = await wishlistModel.findOne({ user: user_Id, 'wishlistItems.product': proId })
+                    let wishlist = await wishlistModel.findOne({ user: user_Id, 'wishListItems.product': proId })
+                    console.log(wishlist,"wishlist")
                     if (wishlist) {
                         wishlistModel.updateOne({ user: userId }, {
                             $pull: {
-                                wishlistItems:
+                                wishListItems:
                                     { product: proId }
                             }
                         }).then((data) => {
@@ -149,11 +161,32 @@ module.exports = {
             let count = 0
             let cartProduct = await cartModel.findOne({ user: userId });
             if (cartProduct) {
-                console.log(cartProduct);
+                // console.log(cartProduct);
                 count = cartProduct.cartItems.length
-                console.log(count);
+                // console.log(count);
             }
             resolve(count)
+        })
+    },
+    cartTotal: (cart) => {
+        return new Promise(async (resolve, reject) => {
+            let total = cart.cartItems.reduce((acc, curr) => {
+                acc = acc + curr.product.productprice * curr.quantity
+                return acc;
+            }, 0)
+            let response = {};
+            let shipping = 0;
+            if (total < 1000) {
+                shipping = 100;
+            }
+            response.shipping = shipping;
+            response.total = total;
+            response.grandTotal = response.total + response.shipping;
+            if(cart.discount){
+               response.grandTotal = response.grandTotal - cart.discount
+                response.discount = cart.discount
+            }
+            resolve(response);
         })
     },
     wishlistCount: (userId) => {
@@ -169,9 +202,9 @@ module.exports = {
     getCartProducts: (userId) => {
         return new Promise(async(resolve, reject) => {
             let response={}
-            console.log("before fn"+userId)
+            // console.log("before fn"+userId)
             let cartItems = await cartModel.findOne({user:userId}).populate('cartItems.product').lean()
-            console.log(cartItems)
+            if (cartItems){
             if(cartItems.cartItems.length > 0){
                 response.notEmpty =true
                 response.cart=cartItems
@@ -179,13 +212,16 @@ module.exports = {
             }else{
                 response.notEmpty=false
                 resolve(response) 
-            }
+            }}
+            else{
+                response.notEmpty=false
+                    resolve(response) }
             
             })
         },
     
     quantityPlus: (proId, userId) => {
-        console.log(proId)
+        // console.log(proId)
         return new Promise((resolve, reject) => {
             cartModel.updateOne({ user: userId, 'cartItems.product': proId }, { $inc: { 'cartItems.$.quantity': 1 } }).then(async (data) => {
                 let cart = await cartModel.findOne({ user: userId }).lean()
@@ -208,7 +244,7 @@ module.exports = {
                 let response = {}
                 let cart = await cartModel.findOne({ user: userId }).lean()
                 response.cart = cart
-                console.log(cart)
+                // console.log(cart)
                 let count = null
                 for (let i = 0; i < cart.cartItems.length; i++) {
                     if (cart.cartItems[i].product == proId) {
@@ -282,7 +318,7 @@ module.exports = {
                 wishlistItems[0] = {product}
                 newWishlist = new wishlistModel({
                     user,
-                    wishlistItems
+                    wishListItems
                 })
                 newWishlist.save().then((data) => {
                     response.added = true
@@ -321,6 +357,186 @@ module.exports = {
             })
         })
     },
+    getAddress: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let address = await addressModel.find({ user: userId }).lean();
+            resolve(address);
+        })
+    },
+    addAddress: (data, userId) => {
+        return new Promise(async (resolve, reject) => {
+            try{
+
+                let defaultAddress = null;
+                let address = await addressModel.find({ User: userId }).lean();
+                console.log(address)
+                if (address) {
+                    defaultAddress = false;
+                } else {
+                    defaultAddress = true;
+                }
+                let Address = new addressModel({
+                    User: userId,
+                    name: data.name,
+                    email:data.email,
+                    mobile:data.mobile,
+                    address1: data.address1,
+                    address2: data.address2,
+                    country: data.country,
+                    city: data.city,
+                    state: data.state,
+                    pincode: data.pincode,
+                    
+                    defaultAddress
+                })
+            console.log(Address)
+                Address.save().then((address) => {
+                    resolve(address);
+                })
+            }catch(err){
+                console.log(err)
+            }
+            })
+            
+    },
+    applyCoupon: (couponcode,id) => {
+        return new Promise(async(resolve, reject) => {
+            let response = {}
+            response.discount = 0
+            // code.code = code.code.toUpperCase();
+            let coupon = await couponModel.findOne({code:couponcode.code})
+            console.log(coupon)
+            if(coupon){
+                response.status = true
+                response.coupon = coupon
+                userHelper.getCartProducts(id).then((cartProducts)=>{
+                    userHelper.cartTotal(cartProducts.cart).then((total)=>{
+                        response.discount = (total.grandTotal * coupon.percentage)/100
+                        response.grandTotal = total.grandTotal - response.discount
+                        console.log(response,"cpn apply")
+                        resolve(response)
+                    })
+                })
+            }else{
+                response.status = false
+                resolve(response)
+            }
+        })
+    }, 
+    PlaceOrder:(data,userId)=>{
+        let orderStatus
+        return new Promise(async (resolve, reject) => {
+          if(data.paymentMethod==='COD'){
+           orderStatus ='Placed' ;
+          }else{orderStatus ='Pending'
+
+          }
+          console.log(data,"rrrr");
+          userHelper.getCartProducts(userId).then((cartProducts)=>{
+            userHelper.cartTotal(cartProducts.cart).then((response)=>{
+                console.log(response,"ppppp")
+                if(data.discount){
+                    response.grandTotal = response.grandTotal - data.discount
+                    console.log(response.grandTotal,data.discount)
+                }
+             let order = new orderModel({
+                user: userId,
+                orderItems: cartProducts.cart.cartItems,
+                totalPrice:response.grandTotal,
+                deliveryCharge: response.shipping,
+                deliveryDetails: data.address,
+                paymentDetails:data.paymentMethod,
+                orderStatus,
+                orderDate:new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear(),
+                
+                discount:data.discount,
+                subTotal:response.total,
+              })
+              order.save().then(async(data)=>{
+                let cartItems = cartProducts.cart.cartItems
+                cartModel.findOneAndUpdate({user:userId},{$pull:{cartItems:{}}}).then((data)=>{
+                    console.log(data);
+                
+                })
+                
+                resolve(data);
+              })
+            })
+          })
+        })
+      },
+      generateRazorPay:(Order)=>{
+        return new Promise((resolve,reject) => {
+            console.log(Order._id,"generater")
+            let fund = Order.totalPrice * 100
+            fund = parseInt(fund)
+            var options = {
+                amount: fund,  // amount in the smallest currency unit
+                currency: "INR",
+                receipt: ""+Order._id,
+              };
+              instance.orders.create(options, function(err, order) {
+                console.log(order+"sdfgbhzxcdfgxsdcvxcv");
+                console.log(err);
+
+                resolve(order)
+              });
+
+        })
+      },
+      verifyPayment:(data)=>{
+        return new Promise(async (resolve, reject) => {
+          const crypto = require('crypto');
+          let hmac = crypto.createHmac('sha256','UoelUxDoICR5bwkpCVVE0tmI')
+          let body=data.payment.razorpay_order_id + "|" + data.payment.razorpay_payment_id;
+          hmac.update(body.toString());
+          hmac = hmac.digest('hex');
+          if(hmac==data.payment.razorpay_signature){
+            resolve();
+          }else{
+            reject();
+          }
+        })
+      },
+      changeOrderStatus:(data,id)=>{
+        return new Promise(async (resolve, reject)=>{
+          orderModel.findByIdAndUpdate(data.order.receipt,{ orderStatus:'Placed',deliveryStatus:'processing' }).then(()=>{
+            cartModel.findOneAndRemove({user:id}).then(()=>{
+                resolve()
+            })
+          })
+        })
+      },
+      getOrder:(id) => {
+        return new Promise((resolve,reject)=>{
+            orderModel.findById(id).populate('orderItems.product').populate('deliveryDetails').lean().then((order)=>{
+                resolve(order)
+            })
+        })
+      },
+      getAllProducts:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let products = await productModel.find({}).populate('categories').lean().then((products)=>{
+                resolve(products);
+            })
+        })
+      },
+      getUserOrders:(userId)=>{
+        console.log(userId,"orderjs")
+        return new Promise(async (resolve, reject) => {
+            let userOrder = await orderModel.find({ userId:userId }).sort({orderDate:-1}).populate('orderItems.product').lean()
+            console.log(userOrder , "userorder")
+                resolve(userOrder)
+            })
+        },
+        cancelOrder:(orderId)=>{
+            return new Promise(async(resolve,reject)=>{
+                let order = await orderModel.findById(orderId).lean()
+                orderModel.findByIdAndUpdate(orderId,{orderStatus:'cancelled'}).then((data)=>{
+                    resolve(data)
+                })
+            })
+        }
     /*userData:(id)=>{
         return new Promise((resolve,reject)=>{
             
@@ -332,6 +548,6 @@ module.exports = {
     }*/
 
 }
-
+module.exports = userHelper
 
 

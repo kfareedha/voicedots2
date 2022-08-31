@@ -18,7 +18,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-  
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 <style>
     .head a{
@@ -47,9 +47,10 @@
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 
 <body>
@@ -65,12 +66,12 @@
             }).then((e) => {
                 console.log(e)
                 if (e.data.response.duplicate) {
-                    swal("Oops","Item already added to the cart","warning")
+                    swal.fire("Oops","Item already added to the cart","warning")
                 } else {
                     let count = document.getElementById('cart-count').innerHTML
                     count = parseInt(count) + 1
                     document.getElementById('cart-count').innerHTML = count
-                    alert("Item added to the cart")
+                    swal.fire("Item added to the cart")
 
                 }
             })
@@ -83,6 +84,44 @@
             deleteW()
             console.log('gjghjgfhgfuyjyhfdgrfdg')
         }
+        const addToWishList = async (id) => {
+        const res = await axios.post(`/addToWishList/${id}`, {
+        }).then((e) => {
+            if (e.data.response.cart) {
+                Swal.fire("Item already added to the cart")
+            } else {
+                if (e.data.response.added) {
+                    swal("Item added to the wishlist")
+                    let count = document.getElementById('wishlist-count').innerHTML
+                    count = parseInt(count) + 1
+                    document.getElementById('wishlist-count').innerHTML = count
+                    { { !--document.getElementById('wishListIcon').style.color = '#FF0000' -- } }
+                } else {
+                     swal("Item removed from wishlist")
+                    let count = document.getElementById('wishlist-count').innerHTML
+                    count = parseInt(count) - 1
+                    document.getElementById('wishlist-count').innerHTML = count
+
+                    { { !--document.getElementById('wishListIcon').style.color = '#a9a9a9' -- } }
+                }
+            }
+
+        })
+    }
+    let product = document.getElementById('product-id').value
+    document.product = product
+    document.addEventListener('DOMContentLoaded', myWishlist, false)
+    async function myWishlist(evt) {
+
+        const res = await axios.get(`/checkWishlist/${evt.currentTarget.product}`, {}).then((e) => {
+            console.log(e.data.wishList)
+            if (e.data.wishList) {
+                document.getElementById('wishListIcon').style.color = '#FF0000'
+            } else {
+                document.getElementById('wishListIcon').style.color = '#a9a9a9'
+            }
+        })
+    }
     </script>
 
 </body>

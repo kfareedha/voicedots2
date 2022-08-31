@@ -1,5 +1,5 @@
 const mongoose = require( 'mongoose')
-const mongourl="mongodb://127.0.0.1:27017/voicedots"
+const mongourl="mongodb+srv://kfareedha:lUJs5V8zHGbinvL5@cluster0.ix9d75z.mongodb.net/voicedots?retryWrites=true&w=majority"
 const mongoconnect=mongoose.connect(mongourl,()=>console.log("database connected"))
 
 module.exports={

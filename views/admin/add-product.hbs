@@ -29,7 +29,7 @@
                         <a class="nav-link" href="/admin/view-banner">Banners</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="">Cart</a>
+                         <a class="nav-link active" href="/admin/view-order">Orders</a>
                     </li>
                 </ul>
                 <a href="/admin/adminlogout" class="btn btn-danger">Logout</a>
@@ -41,7 +41,7 @@
   <div class=" container row">
     <div class="ml-5 col-md-6">
       <h2 class="text-center mt-5">Add product</h2>
-      <form action="/admin/add-product" method="post" enctype="multipart/form-data">
+      <form action="/admin/add-product" method="post" enctype="multipart/form-data" id="addproduct">
        {{#if exist}}
        
        <script>
@@ -85,3 +85,29 @@
     </div>
   </div>
 </section>
+<script>
+$(document).ready(function () {
+    $("#addproduct").validate({
+      rules: {
+        productname: {
+          required: true,
+
+        },
+        productdescription: {
+          required: true,
+
+        },
+        productcategory: {
+          required: true,
+
+        },
+        productimage: {
+          required: true,
+
+        },
+       
+
+      }
+    })
+  })
+  </script>

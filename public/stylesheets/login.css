@@ -1,14 +1,14 @@
 body{
-    padding-top:4.2rem;
-    padding-bottom:4.2rem;
+    padding-top:2rem;
+    padding-bottom:2rem;
     background:rgba(255, 255, 255, 0.76);
     }
     a{
      text-decoration:none !important;
      }
-     h1,h2,h3{
+     /* h1,h2,h3{
      font-family: 'Kaushan Script', cursive;
-     }
+     } */
       .myform{
     position: relative;
     display: -ms-flexbox;

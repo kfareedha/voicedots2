@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/userModel');
-const accountSid = "ACe2f312969f2156bd96aecd5a8ef26c66"
-const authToken = "920044b4522d859ed1c74012f7bdbcdb"
+const accountSid = "AC59d5f04d351ff8916e6ede90bd445557"
+const authToken = "6df098f756065c5e551a3ca939b35e30"
 const client = require('twilio')(accountSid, authToken);
 
 module.exports={
@@ -42,7 +42,7 @@ module.exports={
 sendOtp: (mobile) => {
                     console.log(mobile)
                     return new Promise((resolve, reject) => {
-                        client.verify.v2.services('VAa2efc61392d4a76c7114b9205f5a125c')
+                        client.verify.v2.services('VA51d2797b41d3d20afcc65917e2e09db6')
                             .verifications
                             .create({ to: '+91' + mobile, channel: 'sms' })
                             .then(verification => {
@@ -55,7 +55,7 @@ sendOtp: (mobile) => {
                 },
                 verifyOtp: (otp, mobile) => {
                     return new Promise((resolve, reject) => {
-                        client.verify.v2.services('VAa2efc61392d4a76c7114b9205f5a125c')
+                        client.verify.v2.services('VA51d2797b41d3d20afcc65917e2e09db6')
                             .verificationChecks
                             .create({ to: '+91' + mobile, code: otp })
                             .then((verification_check) => {

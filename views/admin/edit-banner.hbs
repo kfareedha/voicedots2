@@ -28,7 +28,7 @@
                         <a class="nav-link" href="/admin/view-banner">Banners</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="">Cart</a>
+                        <a class="nav-link active" href="/admin/view-order">Orders</a>
                     </li>
                 </ul>
                 <a href="/admin/adminlogout" class="btn btn-danger">Logout</a>
@@ -43,7 +43,7 @@
       
     
         
-      <form action="/admin/edit-banner" method="post" enctype="multipart/form-data">
+      <form action="/admin/edit-banner" method="post" enctype="multipart/form-data" id="addbanner">
       
 
 
@@ -74,3 +74,29 @@
     </div>
   </div>
 </section>
+<script>
+$(document).ready(function () {
+    $("#addbanner").validate({
+      rules: {
+        title: {
+          required: true,
+
+        },
+        caption: {
+          required: true,
+
+        },
+        category: {
+          required: true,
+
+        },
+        bannerimage: {
+          required: true,
+
+        },
+       
+
+      }
+    })
+  })
+  </script>
